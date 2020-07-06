@@ -12,7 +12,7 @@ def register_doctor(request):
 		if form.is_valid():
 			form.save()
 			username = form.cleaned_data.get('username')
-			messages.success(request,f'O λογαριασμός δημιουργήθηκε με όνομα χρήστη {username} !')
+			messages.success(request,f'O λογαριασμός δημιουργήθηκε. Μπορείτε τώρα να συνδεθείτε')
 			return redirect('users:login')
 	else:
 		form = UserRegisterForm()
