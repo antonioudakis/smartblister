@@ -13,7 +13,11 @@ def register_doctor(request):
 			form.save()
 			username = form.cleaned_data.get('username')
 			messages.success(request,f'O λογαριασμός δημιουργήθηκε με όνομα χρήστη {username} !')
-			return redirect('dashboard:index')
+			return redirect('users:login')
 	else:
 		form = UserRegisterForm()
 	return render(request,'users/register_doctor.html', {'title':'Εγγραφή Ιατρού','form':form})
+
+@login_required
+def profile(request):
+	return render(request,'users/profile.html', {'title':'Προφίλ'})

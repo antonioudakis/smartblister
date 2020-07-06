@@ -31,10 +31,11 @@
         </ul>
         <ul class="navbar-nav">
           {% if user.is_authenticated %}
-          <li class="nav-item"><a class="nav-link" href="#">Αποσύνδεση</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:profile' %}">Προφίλ</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:logout' %}">Αποσύνδεση</a></li>
           {% else %}
           <li class="nav-item"><a class="nav-link" href="{% url 'users:register' %}">Εγγραφή</a></li>
-          <li class="nav-item"><a class="nav-link" href="#">Σύνδεση</a></li>
+          <li class="nav-item"><a class="nav-link" href="{% url 'users:login' %}">Σύνδεση</a></li>
           {% endif %}
         </ul>
       </div>
