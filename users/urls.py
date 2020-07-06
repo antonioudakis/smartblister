@@ -5,4 +5,5 @@ app_name = 'users'
 
 urlpatterns = [
 	path('register/',views.register, name='register'),
+	path('register/doctor',views.register_doctor, name='register_doctor'),
 ]
