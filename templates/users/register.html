@@ -1,0 +1,38 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block body_block %}
+<div class="row">
+  <div class="col-sm-4 p-3">
+    <div class="card">
+    	<img class="card-img-top" src="{% static 'dashboard/img/doctor.jpg' %}" alt="Doctor">
+    	<div class="card-body">
+    		<h5 class="card-title">Ιατρός</h5>
+    		<p class="card-text text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του ιατρού</p>
+    		<a href="#" class="btn btn-outline-info">Εγγραφή</a>
+    	</div>
+    </div>
+  </div>
+  <div class="col-sm-4 p-3">
+    <div class="card">
+    	<img class="card-img-top" src="{% static 'dashboard/img/pharmacist.jpg' %}" alt="Pharmacist">
+    	<div class="card-body">
+    		<h5 class="card-title">Φαρμακοποιός</h5>
+    		<p class="card-text text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του φαρμακοποιού</p>
+    		<a href="#" class="btn btn-outline-info">Εγγραφή</a>
+    	</div>
+    </div>
+  </div>
+  <div class="col-sm-4 p-3">
+    <div class="card">
+    	<img class="card-img-top" src="{% static 'dashboard/img/pharmacy_company.jpg' %}" alt="Pharmacist">
+    	<div class="card-body">
+    		<h5 class="card-title">Φαρμακοποιευτική Εταιρεία</h5>
+    		<p class="card-text text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε ως υπεύθυνος φαρμακευτικής εταιρείας</p>
+    		<a href="#" class="btn btn-outline-info">Εγγραφή</a>
+    	</div>
+    </div>
+  </div>
+  </div>
+</div>
+
+{% endblock %}
