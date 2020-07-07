@@ -18,7 +18,7 @@ class UserProfile(models.Model):
 	father_name = models.CharField(max_length=50,blank=True)
 	is_doctor = models.BooleanField(default=False)
 	is_pharmacist = models.BooleanField(default=False)
-	is_company = models.BooleanField(default=False)
+	is_pharmacy = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.user.username

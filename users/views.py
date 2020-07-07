@@ -18,11 +18,71 @@ def register_doctor(request):
 			profile.is_doctor = True
 			profile.save()
 			messages.success(request,f'O λογαριασμός δημιουργήθηκε. Μπορείτε τώρα να συνδεθείτε')
-			return redirect('users:login')
+			return redirect('login')
 	else:
 		u_form = UserRegisterForm()
 		p_form = UserProfileForm()
-	return render(request,'users/register.html', {'title':'Εγγραφή Ιατρού','role':'doctor','u_form':u_form,'p_form':p_form})
+
+	context = {
+		'title':'Εγγραφή Ιατρού',
+		'role':'doctor',
+		'u_form':u_form,
+		'p_form':p_form
+	}
+
+	return render(request,'users/register.html', context)
+
+def register_pharmacist(request):
+	if request.method == 'POST':
+		u_form = UserRegisterForm(request.POST)
+		p_form = UserProfileForm(request.POST)
+		if u_form.is_valid() and p_form.is_valid():
+			user = u_form.save()
+			username = u_form.cleaned_data.get('username')
+			profile = p_form.save(commit=False)
+			profile.user = user
+			profile.is_pharmacist = True
+			profile.save()
+			messages.success(request,f'O λογαριασμός δημιουργήθηκε. Μπορείτε τώρα να συνδεθείτε')
+			return redirect('login')
+	else:
+		u_form = UserRegisterForm()
+		p_form = UserProfileForm()
+
+	context = {
+		'title':'Εγγραφή Φαρμακοποιού',
+		'role':'pharmacist',
+		'u_form':u_form,
+		'p_form':p_form
+	}
+
+	return render(request,'users/register.html', context)
+
+def register_pharmacy(request):
+	if request.method == 'POST':
+		u_form = UserRegisterForm(request.POST)
+		p_form = UserProfileForm(request.POST)
+		if u_form.is_valid() and p_form.is_valid():
+			user = u_form.save()
+			username = u_form.cleaned_data.get('username')
+			profile = p_form.save(commit=False)
+			profile.user = user
+			profile.is_pharmacy = True
+			profile.save()
+			messages.success(request,f'O λογαριασμός δημιουργήθηκε. Μπορείτε τώρα να συνδεθείτε')
+			return redirect('login')
+	else:
+		u_form = UserRegisterForm()
+		p_form = UserProfileForm()
+
+	context = {
+		'title':'Εγγραφή Φαρμακευτικής Εταιρείας',
+		'role':'pharmacy',
+		'u_form':u_form,
+		'p_form':p_form
+	}
+
+	return render(request,'users/register.html', context)
 
 @login_required
 def profile(request):
@@ -46,10 +106,10 @@ def profile(request):
 		role = 'pharmacist'
 		title = 'Ενημέρωση Προφίλ Φαρμακοποιού'
 	elif request.user.userprofile.is_company:
-		role = 'company'
+		role = 'pharmacy'
 		title = 'Ενημέρωση Προφίλ Φαρμακευτικής Εταιρείας'
 	else:
-		role = 'admin'
+		role = 'user'
 		title = 'Ενημέρωση Προφίλ Χρήστη'
 
 	context = {

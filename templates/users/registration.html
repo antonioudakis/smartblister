@@ -18,17 +18,17 @@
     	<div class="card-body">
     		<h5 class="card-title">Φαρμακοποιός</h5>
     		<p class="card-text text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του φαρμακοποιού</p>
-    		<a href="#" class="btn btn-outline-info">Εγγραφή</a>
+    		<a href="{% url 'users:register_pharmacist' %}" class="btn btn-outline-info">Εγγραφή</a>
     	</div>
     </div>
   </div>
   <div class="col-sm-4 p-3">
     <div class="card">
-    	<img class="card-img-top" src="{% static 'dashboard/img/pharmacy_company.jpg' %}" alt="Pharmacist">
+    	<img class="card-img-top" src="{% static 'dashboard/img/pharmacy_company.jpg' %}" alt="Pharmacy">
     	<div class="card-body">
     		<h5 class="card-title">Φαρμακευτική Εταιρεία</h5>
     		<p class="card-text text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε ως υπεύθυνος φαρμακευτικής εταιρείας</p>
-    		<a href="#" class="btn btn-outline-info">Εγγραφή</a>
+    		<a href="{% url 'users:register_pharmacy' %}" class="btn btn-outline-info">Εγγραφή</a>
     	</div>
     </div>
   </div>
