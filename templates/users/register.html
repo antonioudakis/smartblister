@@ -54,8 +54,17 @@
 				<div class="form=group col-md-3 mb-0">
 					{{ p_form.id_place_issued|as_crispy_field }}
 				</div>
-
 			</div>
+			{% if role == 'doctor' %}
+			<div class="form-row">
+				<div class="form=group col-md-6 mb-0">
+					{{ p1_form.speciality|as_crispy_field }}
+				</div>
+				<div class="form=group col-md-6 mb-0">
+					{{ p1_form.office_place|as_crispy_field }}
+				</div>
+			</div>
+			{% endif %}
 			<div class="form-group">
 				<button class="btn btn-outline-info" type="submit">Εγγραφή</button>
 			</div>
