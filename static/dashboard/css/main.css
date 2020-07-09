@@ -1,5 +1,9 @@
 body {
 	background: #fafafa;
+	background-image: url('../img/blisters.jpg');
+	background-repeat: no-repeat;
+  	background-attachment: fixed;
+  	background-size: cover;
 	color: #333333;
 	margin-top: 5rem;
 }
