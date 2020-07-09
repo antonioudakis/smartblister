@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from users.models import UserProfile, DoctorProfile
+from users.models import UserProfile, DoctorProfile, PharmacistProfile, PharmacyProfile
 
 class UserRegisterForm(UserCreationForm):
 	email = forms.EmailField()
@@ -46,5 +46,31 @@ class DoctorProfileForm(forms.ModelForm):
 	class Meta:
 		model = DoctorProfile
 		fields = ['speciality','office_place']
+
+class PharmacistProfileForm(forms.ModelForm):
+	name = forms.CharField(label='Επωνυμία Φαρμακείου',required=False)
+	tax_num = forms.CharField(label='ΑΦΜ Φαρμακείου')
+	doy = forms.CharField(label='ΔΟΥ')
+	city = forms.CharField(label='Πόλη')
+	address = forms.CharField(label='Οδός')
+	address_no = forms.IntegerField(label='Αριθμός')
+	TK = forms.IntegerField(label='Τ.Κ.')
+
+	class Meta:
+		model = PharmacistProfile
+		fields = ['name','tax_num','doy','city','address','address_no','TK']
+
+class PharmacyProfileForm(forms.ModelForm):
+	name = forms.CharField(label='Επωνυμία Φαρμακευτικής Εταιρείας',required=False)
+	tax_num = forms.CharField(label='ΑΦΜ Φαρμακευτικής Εταιρείας')
+	doy = forms.CharField(label='ΔΟΥ')
+	city = forms.CharField(label='Πόλη')
+	address = forms.CharField(label='Οδός')
+	address_no = forms.IntegerField(label='Αριθμός')
+	TK = forms.IntegerField(label='Τ.Κ.')
+
+	class Meta:
+		model = PharmacistProfile
+		fields = ['name','tax_num','doy','city','address','address_no','TK']
 
 

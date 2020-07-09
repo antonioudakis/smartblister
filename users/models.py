@@ -30,3 +30,29 @@ class DoctorProfile(models.Model):
 
 	def __str__(self):
 		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
+
+class PharmacistProfile(models.Model):
+	user = models.OneToOneField(User,on_delete=models.CASCADE)
+	name = models.CharField(max_length=50,blank=True)
+	tax_num = models.CharField(max_length=9)
+	doy = models.CharField(max_length=50,default='')
+	city = models.CharField(max_length=50)
+	address = models.CharField(max_length=50)
+	address_no = models.SmallIntegerField()
+	TK = models.SmallIntegerField()
+
+	def __str__(self):
+		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
+
+class PharmacyProfile(models.Model):
+	user = models.OneToOneField(User,on_delete=models.CASCADE)
+	name = models.CharField(max_length=50,blank=True)
+	tax_num = models.CharField(max_length=9)
+	doy = models.CharField(max_length=50,default='')
+	city = models.CharField(max_length=50)
+	address = models.CharField(max_length=50)
+	address_no = models.SmallIntegerField()
+	TK = models.SmallIntegerField()
+
+	def __str__(self):
+		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
