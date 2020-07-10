@@ -25,11 +25,11 @@
         <img class="mr-2" src="{% static 'dashboard/img/pyrforos.png' %}" width="30" height="30" alt="pyrforos" loading="lazy">Smart-Blister
       </a>
       <div class="collapse navbar-collapse" id="navbarToggler">
-        <ul class="navbar-nav mr-auto">
+        <!--<ul class="navbar-nav mr-auto">
           <li class="nav-item"><a class="nav-link" href="#">link 1</a></li>
           <li class="nav-item"><a class="nav-link" href="#">link 2</a></li>
-        </ul>
-        <ul class="navbar-nav">
+        </ul>-->
+        <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
           <li class="nav-item"><a class="nav-link" href="{% url 'users:profile' %}">Προφίλ</a></li>
           <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Αποσύνδεση</a></li>
