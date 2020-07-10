@@ -70,7 +70,7 @@ class PharmacyProfileForm(forms.ModelForm):
 	TK = forms.IntegerField(label='Τ.Κ.')
 
 	class Meta:
-		model = PharmacistProfile
+		model = PharmacyProfile
 		fields = ['name','tax_num','doy','city','address','address_no','TK']
 
 
