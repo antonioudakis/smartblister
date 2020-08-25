@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
-from users.models import UserProfile, DoctorProfile, PharmacistProfile, PharmacyProfile
+from users.models import UserProfile, DoctorProfile, PharmacistProfile, PharmacyProfile, PatientProfile
 
 class UserRegisterForm(UserCreationForm):
 	email = forms.EmailField()
@@ -73,4 +73,10 @@ class PharmacyProfileForm(forms.ModelForm):
 		model = PharmacyProfile
 		fields = ['name','tax_num','doy','city','address','address_no','TK']
 
+class PatientProfileForm(forms.ModelForm):
+	AMKA = forms.IntegerField(label='ΑΜΚΑ')
+
+	class Meta:
+		model = PatientProfile
+		fields = ['AMKA']
 

@@ -2,7 +2,17 @@
 {% load static %}
 {% block body_block %}
 <div class="row">
-  <div class="col-sm-4 p-3">
+  <div class="col-sm-6 p-3">
+    <div class="card shadow bg-white rounded">
+      <img class="card-img-top" src="{% static 'dashboard/img/patient.jpg' %}" alt="Patient">
+      <div class="card-body">
+        <h4 class="card-title text-primary">Ασθενής</h4>
+        <p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του ασθενούς.<br>Μετά την εγγραφή σας θα έχετε την δυνατότητα να ορίσετε ειδοποιήσεις σχετικά με το δοσολογικό σχήμα της θεραπείας σας και να παρακολουθείτε το ιστορικό των ιατρικών σας εξετάσεων</p>
+        <a href="{% url 'users:register_patient' %}" class="btn btn-outline-info">Εγγραφή</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 p-3">
     <div class="card shadow bg-white rounded">
     	<img class="card-img-top" src="{% static 'dashboard/img/doctor.jpg' %}" alt="Doctor">
     	<div class="card-body">
@@ -12,7 +22,9 @@
     	</div>
     </div>
   </div>
-  <div class="col-sm-4 p-3">
+</div>
+<div class="row">
+  <div class="col-sm-6 p-3">
     <div class="card shadow bg-white rounded">
     	<img class="card-img-top" src="{% static 'dashboard/img/pharmacist.jpg' %}" alt="Pharmacist">
     	<div class="card-body">
@@ -22,7 +34,7 @@
     	</div>
     </div>
   </div>
-  <div class="col-sm-4 p-3">
+  <div class="col-sm-6 p-3">
     <div class="card shadow bg-white rounded">
     	<img class="card-img-top" src="{% static 'dashboard/img/pharmacy_company.jpg' %}" alt="Pharmacy">
     	<div class="card-body">
@@ -31,7 +43,6 @@
     		<a href="{% url 'users:register_pharmacy' %}" class="btn btn-outline-info">Εγγραφή</a>
     	</div>
     </div>
-  </div>
   </div>
 </div>
 

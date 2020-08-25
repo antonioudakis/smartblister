@@ -9,5 +9,6 @@ urlpatterns = [
 	path('register/doctor/',views.register_doctor, name='register_doctor'),
 	path('register/pharmacist/',views.register_pharmacist, name='register_pharmacist'),
 	path('register/pharmacy/',views.register_pharmacy, name='register_pharmacy'),
+	path('register/patient/',views.register_patient, name='register_patient'),
 	path('profile',views.profile, name='profile'),
 ]

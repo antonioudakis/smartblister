@@ -19,6 +19,7 @@ class UserProfile(models.Model):
 	is_doctor = models.BooleanField(default=False)
 	is_pharmacist = models.BooleanField(default=False)
 	is_pharmacy = models.BooleanField(default=False)
+	is_patient = models.BooleanField(default=False)
 
 	def __str__(self):
 		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')'
@@ -53,6 +54,13 @@ class PharmacyProfile(models.Model):
 	address = models.CharField(max_length=50)
 	address_no = models.SmallIntegerField()
 	TK = models.SmallIntegerField()
+
+	def __str__(self):
+		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
+
+class PatientProfile(models.Model):
+	user = models.OneToOneField(User,on_delete=models.CASCADE)
+	AMKA = models.BigIntegerField(blank=True, unique=True, default='')
 
 	def __str__(self):
 		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 

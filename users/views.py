@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from users.forms import UserRegisterForm, UserUpdateForm, UserProfileForm, DoctorProfileForm, PharmacistProfileForm, PharmacyProfileForm
+from users.forms import UserRegisterForm, UserUpdateForm, UserProfileForm, DoctorProfileForm, PharmacistProfileForm, PharmacyProfileForm, PatientProfileForm
 
 def registration(request):
 	return render(request,'users/registration.html', {'title':'Εγγραφή'})
@@ -98,6 +98,38 @@ def register_pharmacy(request):
 		'u_form':u_form,
 		'p_form':p_form,
 		'p1_form':p1_form
+	}
+
+	return render(request,'users/register.html', context)
+
+def register_patient(request):
+	if request.method == 'POST':
+		u_form = UserRegisterForm(request.POST)
+		p_form = UserProfileForm(request.POST)
+		p1_form = PatientProfileForm(request.POST)
+		if u_form.is_valid() and p_form.is_valid() and p1_form.is_valid():
+			user = u_form.save()
+			username = u_form.cleaned_data.get('username')
+			profile = p_form.save(commit=False)
+			profile.user = user
+			profile.is_patient = True
+			profile.save()
+			patient_profile = p1_form.save(commit=False)
+			patient_profile.user = user
+			patient_profile.save()
+			messages.success(request,f'O λογαριασμός δημιουργήθηκε. Μπορείτε τώρα να συνδεθείτε')
+			return redirect('login')
+	else:
+		u_form = UserRegisterForm()
+		p_form = UserProfileForm()
+		p1_form = PatientProfileForm()
+
+	context = {
+		'title':'Εγγραφή Ασθενούς',
+		'role':'patient',
+		'u_form':u_form,
+		'p_form':p_form,
+		'p1_form':p1_form,
 	}
 
 	return render(request,'users/register.html', context)
