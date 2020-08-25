@@ -107,6 +107,12 @@
 					{{ p1_form.TK|as_crispy_field }}
 				</div>
 			</div>
+			{% elif role == 'patient' %}
+			<div class="form-row">
+				<div class="form=group col-md-6 mb-0">
+					{{ p1_form.AMKA|as_crispy_field }}
+				</div>
+			</div>
 			{% endif %}
 			<div class="form-group">
 				<button class="btn btn-outline-info" type="submit">Ενημέρωση</button>

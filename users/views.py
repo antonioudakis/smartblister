@@ -145,6 +145,8 @@ def profile(request):
 			p1_form = PharmacistProfileForm(request.POST, instance=request.user.pharmacistprofile)
 		elif request.user.userprofile.is_pharmacy:
 			p1_form = PharmacyProfileForm(request.POST, instance=request.user.pharmacyprofile)
+		elif request.user.userprofile.is_patient:
+			p1_form = PatientProfileForm(request.POST, instance=request.user.patientprofile)
 		else:
 			pass
 
@@ -164,6 +166,8 @@ def profile(request):
 			p1_form = PharmacistProfileForm(instance=request.user.pharmacistprofile)
 		elif request.user.userprofile.is_pharmacy:
 			p1_form = PharmacyProfileForm(instance=request.user.pharmacyprofile)
+		elif request.user.userprofile.is_patient:
+			p1_form = PatientProfileForm(instance=request.user.patientprofile)
 		else:
 			pass
 
@@ -176,6 +180,9 @@ def profile(request):
 	elif request.user.userprofile.is_pharmacy:
 		role = 'pharmacy'
 		title = 'Ενημέρωση Προφίλ Φαρμακευτικής Εταιρείας'
+	elif request.user.userprofile.is_patient:
+		role = 'patient'
+		title = 'Ενημέρωση Προφίλ Ασθενούς'
 	else:
 		role = 'user'
 		title = 'Ενημέρωση Προφίλ Χρήστη'
