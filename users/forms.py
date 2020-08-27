@@ -75,8 +75,9 @@ class PharmacyProfileForm(forms.ModelForm):
 
 class PatientProfileForm(forms.ModelForm):
 	AMKA = forms.IntegerField(label='ΑΜΚΑ')
+	doctor = forms.ModelChoiceField(label='Επιβλέπων Ιατρός',queryset=DoctorProfile.objects.all().order_by('user__last_name'))
 
 	class Meta:
 		model = PatientProfile
-		fields = ['AMKA']
+		fields = ['AMKA','doctor']
 

@@ -30,7 +30,7 @@ class DoctorProfile(models.Model):
 	office_place = models.CharField(max_length=100)
 
 	def __str__(self):
-		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
+		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.speciality + ')' 
 
 class PharmacistProfile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE)
@@ -61,6 +61,7 @@ class PharmacyProfile(models.Model):
 class PatientProfile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE)
 	AMKA = models.BigIntegerField(blank=True, unique=True, default='')
+	doctor = models.ForeignKey(DoctorProfile, on_delete=models.SET_NULL, blank=True, null=True)
 
 	def __str__(self):
 		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
