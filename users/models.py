@@ -9,6 +9,7 @@ class UserProfile(models.Model):
 		(3,'Στρατιωτική')
 	)
 	user = models.OneToOneField(User,on_delete=models.CASCADE)
+	amka = models.CharField(max_length=11,unique=True,default='')
 	birthdate = models.DateField(default=timezone.now)
 	cell_phone = models.BigIntegerField(blank=True)
 	id_num = models.CharField(max_length=8,unique=True,default='')
@@ -60,8 +61,11 @@ class PharmacyProfile(models.Model):
 
 class PatientProfile(models.Model):
 	user = models.OneToOneField(User,on_delete=models.CASCADE)
-	AMKA = models.BigIntegerField(blank=True, unique=True, default='')
 	doctor = models.ForeignKey(DoctorProfile, on_delete=models.SET_NULL, blank=True, null=True)
 
 	def __str__(self):
-		return self.user.last_name + ' ' + self.user.first_name[:1] + '. (' + self.user.username + ')' 
+		return  self.user.last_name + ' ' + self.user.first_name + ' (' + self.amka() +')'
+
+	def amka(self):
+		profile = UserProfile.objects.filter(user=self.user).first()
+		return profile.amka

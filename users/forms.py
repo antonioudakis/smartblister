@@ -27,6 +27,7 @@ class UserProfileForm(forms.ModelForm):
 		(2,'Διαβατήριο'),
 		(3,'Στρατιωτική')
 	)
+	amka = forms.CharField(label='ΑΜΚΑ',max_length=11)
 	father_name = forms.CharField(label='Πατρώνυμο',max_length=50,required=False)
 	birthdate = forms.DateField(label='Ημ/νία Γέννησης',required=False)
 	cell_phone = forms.IntegerField(label='Κινητό Τηλέφωνο',required=False)
@@ -37,7 +38,7 @@ class UserProfileForm(forms.ModelForm):
 
 	class Meta:
 		model = UserProfile
-		fields = ['father_name','birthdate','cell_phone','id_num','id_type','id_date_issued','id_place_issued']
+		fields = ['amka','father_name','birthdate','cell_phone','id_num','id_type','id_date_issued','id_place_issued']
 
 class DoctorProfileForm(forms.ModelForm):
 	speciality = forms.CharField(label='Ειδικότητα')
@@ -74,10 +75,9 @@ class PharmacyProfileForm(forms.ModelForm):
 		fields = ['name','tax_num','doy','city','address','address_no','TK']
 
 class PatientProfileForm(forms.ModelForm):
-	AMKA = forms.IntegerField(label='ΑΜΚΑ')
-	doctor = forms.ModelChoiceField(label='Επιβλέπων Ιατρός',queryset=DoctorProfile.objects.all().order_by('user__last_name'))
+	doctor = forms.ModelChoiceField(label='Επιβλέπων Ιατρός',queryset=DoctorProfile.objects.all().order_by('user__last_name'),required=False)
 
 	class Meta:
 		model = PatientProfile
-		fields = ['AMKA','doctor']
+		fields = ['doctor']
 
