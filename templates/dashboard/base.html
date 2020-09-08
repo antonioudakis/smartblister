@@ -32,13 +32,23 @@
         <ul class="navbar-nav ml-auto">
           {% if user.is_authenticated %}
             {% if user.userprofile.is_doctor %}
-              <li class="nav-item"><a class="nav-link" href="{% url 'doctor:monitoring_request' %}">Ασθενείς</a></li>
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Ασθενείς</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'doctor:monitoring_request' %}">Αίτηση πρόσβασης smartblister</a>
+                </div>
+              </li>
             {% endif %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'users:profile' %}">Προφίλ</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Αποσύνδεση</a></li>
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user.last_name }} {{ user.first_name }}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'users:profile' %}">Προφίλ</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">Αποσύνδεση</a>
+              </div>
+            </li>
           {% else %}
-          <li class="nav-item"><a class="nav-link" href="{% url 'users:registration' %}">Εγγραφή</a></li>
-          <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Σύνδεση</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'users:registration' %}">Εγγραφή</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Σύνδεση</a></li>
           {% endif %}
         </ul>
       </div>
