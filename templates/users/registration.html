@@ -2,7 +2,7 @@
 {% load static %}
 {% block body_block %}
 <div class="row">
-  <div class="col-sm-6 p-3">
+  <div class="col-sm-4 p-3">
     <div class="card shadow bg-white rounded">
       <img class="card-img-top" src="{% static 'dashboard/img/patient.jpg' %}" alt="Patient">
       <div class="card-body">
@@ -12,7 +12,7 @@
       </div>
     </div>
   </div>
-  <div class="col-sm-6 p-3">
+  <div class="col-sm-4 p-3">
     <div class="card shadow bg-white rounded">
     	<img class="card-img-top" src="{% static 'dashboard/img/doctor.jpg' %}" alt="Doctor">
     	<div class="card-body">
@@ -22,8 +22,18 @@
     	</div>
     </div>
   </div>
+  <div class="col-sm-4 p-3">
+    <div class="card shadow bg-white rounded">
+      <img class="card-img-top" src="{% static 'dashboard/img/pharmacist.jpg' %}" alt="Pharmacist">
+      <div class="card-body">
+        <h4 class="card-title text-primary">Φαρμακοποιός</h4>
+        <p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του φαρμακοποιού.<br>Μετά την εγγραφή σας θα μπορείτε να αρχικοποιείτε τις smart-blister συσκευές των ασθενών, ενώ παράλληλα θα σας έρχονται ειδοποιήσεις για μελλοντικές απαιτήσεις φαρμάκων ώστε να μπορείτε να αποφύγετε πιθανές ελλείψεις αυτών.</p>
+        <a href="{% url 'users:register_pharmacist' %}" class="btn btn-outline-info">Εγγραφή</a>
+      </div>
+    </div>
+  </div>
 </div>
-<div class="row">
+<!--<div class="row">
   <div class="col-sm-6 p-3">
     <div class="card shadow bg-white rounded">
     	<img class="card-img-top" src="{% static 'dashboard/img/pharmacist.jpg' %}" alt="Pharmacist">
@@ -44,6 +54,6 @@
     	</div>
     </div>
   </div>
-</div>
+</div>-->
 
 {% endblock %}
