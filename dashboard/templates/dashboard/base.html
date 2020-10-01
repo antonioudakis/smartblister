@@ -1,0 +1,74 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	<!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/main.css' %}">
+  {% if title %}
+    <title>{{ title }}</title>
+  {% else %}
+    <title>Smart Blister</title>
+  {% endif %}
+</head>
+<body>
+  <header class="site-header">
+    <nav class="navbar fixed-top navbar-expand-sm navbar-dark bg-steel">
+      <a class="navbar-brand mr-4" href="{% url 'dashboard:index' %}">
+        <img class="mr-2" src="{% static 'dashboard/img/pyrforos.png' %}" width="30" height="30" alt="pyrforos" loading="lazy">Smart-Blister
+      </a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggler" aria-controls="navbarToggler" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarToggler">
+        <!--<ul class="navbar-nav mr-auto">
+          <li class="nav-item"><a class="nav-link" href="#">link 1</a></li>
+          <li class="nav-item"><a class="nav-link" href="#">link 2</a></li>
+        </ul>-->
+        <ul class="navbar-nav ml-auto">
+          {% if user.is_authenticated %}
+            {% if user.userprofile.is_doctor %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Ασθενείς</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'doctor:monitoring_request' %}">Αίτηση πρόσβασης smartblister</a>
+                </div>
+              </li>
+            {% endif %}
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user.last_name }} {{ user.first_name }}</a>
+              <div class="dropdown-menu">
+                <a class="dropdown-item" href="{% url 'users:profile' %}">Προφίλ</a>
+                <a class="dropdown-item" href="{% url 'logout' %}">Αποσύνδεση</a>
+              </div>
+            </li>
+          {% else %}
+            <li class="nav-item"><a class="nav-link" href="{% url 'users:registration' %}">Εγγραφή</a></li>
+            <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Σύνδεση</a></li>
+          {% endif %}
+        </ul>
+      </div>
+    </nav>
+  </header>
+  <main role="main" class="container">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endif %}
+    {% block body_block %}
+    {% endblock %}
+  </main>
+	<!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
+</body>
+</html>

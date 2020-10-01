@@ -1,0 +1,59 @@
+{% extends "dashboard/base.html" %}
+{% load static %}
+{% block body_block %}
+<div class="row">
+  <div class="col-sm-4 p-3">
+    <div class="card shadow bg-white rounded">
+      <img class="card-img-top" src="{% static 'dashboard/img/patient.jpg' %}" alt="Patient">
+      <div class="card-body">
+        <h4 class="card-title text-primary">Ασθενής</h4>
+        <p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του ασθενούς.<br>Μετά την εγγραφή σας θα έχετε την δυνατότητα να ορίσετε ειδοποιήσεις σχετικά με το δοσολογικό σχήμα της θεραπείας σας και να παρακολουθείτε το ιστορικό των ιατρικών σας εξετάσεων</p>
+        <a href="{% url 'users:register_patient' %}" class="btn btn-outline-info">Εγγραφή</a>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-4 p-3">
+    <div class="card shadow bg-white rounded">
+    	<img class="card-img-top" src="{% static 'dashboard/img/doctor.jpg' %}" alt="Doctor">
+    	<div class="card-body">
+    		<h4 class="card-title text-primary">Ιατρός</h4>
+    		<p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του ιατρού.<br>Μετά την εγγραφή σας θα έχετε την δυνατότητα να παρακολουθείτε τον βαθμό της φαρμακευτικής συμμόρφωσης των ασθενών που παρακολουθείτε, την επίδραση των φαρμάκων στους ασθενείς και τυχόν ανεπιθύμητες ενέργειες αυτών.</p>
+    		<a href="{% url 'users:register_doctor' %}" class="btn btn-outline-info">Εγγραφή</a>
+    	</div>
+    </div>
+  </div>
+  <div class="col-sm-4 p-3">
+    <div class="card shadow bg-white rounded">
+      <img class="card-img-top" src="{% static 'dashboard/img/pharmacist.jpg' %}" alt="Pharmacist">
+      <div class="card-body">
+        <h4 class="card-title text-primary">Φαρμακοποιός</h4>
+        <p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του φαρμακοποιού.<br>Μετά την εγγραφή σας θα μπορείτε να αρχικοποιείτε τις smart-blister συσκευές των ασθενών, ενώ παράλληλα θα σας έρχονται ειδοποιήσεις για μελλοντικές απαιτήσεις φαρμάκων ώστε να μπορείτε να αποφύγετε πιθανές ελλείψεις αυτών.</p>
+        <a href="{% url 'users:register_pharmacist' %}" class="btn btn-outline-info">Εγγραφή</a>
+      </div>
+    </div>
+  </div>
+</div>
+<!--<div class="row">
+  <div class="col-sm-6 p-3">
+    <div class="card shadow bg-white rounded">
+    	<img class="card-img-top" src="{% static 'dashboard/img/pharmacist.jpg' %}" alt="Pharmacist">
+    	<div class="card-body">
+    		<h4 class="card-title text-primary">Φαρμακοποιός</h4>
+    		<p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε με την ιδιότητα του φαρμακοποιού.<br>Μετά την εγγραφή σας θα μπορείτε να αρχικοποιείτε τις smart-blister συσκευές των ασθενών, ενώ παράλληλα θα σας έρχονται ειδοποιήσεις για μελλοντικές απαιτήσεις φαρμάκων ώστε να μπορείτε να αποφύγετε πιθανές ελλείψεις αυτών.</p>
+    		<a href="{% url 'users:register_pharmacist' %}" class="btn btn-outline-info">Εγγραφή</a>
+    	</div>
+    </div>
+  </div>
+  <div class="col-sm-6 p-3">
+    <div class="card shadow bg-white rounded">
+    	<img class="card-img-top" src="{% static 'dashboard/img/pharmacy_company.jpg' %}" alt="Pharmacy">
+    	<div class="card-body">
+    		<h4 class="card-title text-primary">Φαρμακευτική Εταιρεία</h4>
+    		<p class="card-text text-secondary text-justify">Πατήστε το πλήκτρο εγγραφή για να εγγραφείτε ως υπεύθυνος φαρμακευτικής εταιρείας.<br>Μετά την εγγραφή σας μπορείτε να παρακολουθείτε στατιστικά στοιχεία σχετικά με την φαρμακευτική συμμόρφωση των ασθενών, την αποτελεσματικότητα των φαρμάκων σας καθώς και τυχόν ανεπιθύμητες ενέργειες αυτών.</p>
+    		<a href="{% url 'users:register_pharmacy' %}" class="btn btn-outline-info">Εγγραφή</a>
+    	</div>
+    </div>
+  </div>
+</div>-->
+
+{% endblock %}
