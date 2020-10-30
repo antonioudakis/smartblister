@@ -1,0 +1,151 @@
+LOCAL SETUP
+https://www.python.org/downloads/
+py -m venv smartblister
+smartblister\Scripts\activate.bat
+py -m pip install Django
+py -m pip install --upgrade pip
+django-admin startproject smartblister
+cd smartblister
+python manage.py migrate
+py -m pip install pillow
+py -m pip install bcrypt
+py -m pip install django[argon2]
+python manage.py createsuperuser
+python manage.py startapp dashboard
+python manage.py startapp users
+py -m pip install django-crispy-forms
+pip freeze
+	
+	και φτιάχνω το requirements.txt το οποίο θα το αποθηκεύσω στο στον ubuntu server ~/smartblister
+
+UBUNTU SERVER SETUP
+apt-get update && apt-get upgrade
+hostnamectl set-hostname smartblister
+vi /etc/hosts 
+	
+	και γράφω:
+	
+		10.0.1.143 smartblister
+
+αν θέλω να προσθέσω χρήστη:
+
+adduser webmaster
+adduser webmaster sudo
+
+αν θέλω να διαγράψω χρήστη:
+
+deluser --remove-home webmaster
+
+mkdir -p ~/.ssh
+ls -la
+ssh-keygen -b 4096
+mv ~/.ssh/id_rsa.pub ~/.ssh/authorized_keys
+sudo chmod 700 ~/.ssh/
+sudo chmod 600 ~/.ssh/*
+sudo apt install openssh-server
+sudo systemctl start sshd ή restart sshd
+sudo vi /etc/ssh/sshd_config
+
+	και γράφω:
+
+		PermitRootLogin no
+		PasswordAuthentication no
+
+sudo apt-get install ufw
+sudo ufw default allow outgoing
+sudo ufw default deny incoming
+sudo ufw allow ssh
+sudo ufw allow 8000
+sudo ufw enable
+sudo ufw status
+
+sudo apt-get install python3-pip
+sudo apt-get install python3-venv
+python3 -m venv smartblister/venv
+cd smartblister
+source venv/bin/activate
+pip install -r requirements.txt
+sudo vi ~/smartblister/smartblister/settings.py
+
+	και γράφω:
+
+		ALLOWED_HOSTS = ['10.0.1.143']
+		STATIC_ROOT = os.path.join[BASE_DIR,'static']
+
+	κάνω comment το:
+
+		#STATICFILES_DIRS = [STATIC_DIR, ]
+
+python manage.py collectstatic
+sudo vi ~/smartblister/smartblister/settings.py
+
+	κάνω comment το:
+
+		#STATIC_ROOT = os.path.join[BASE_DIR,'static']
+
+	αφαιρώ το comment:
+
+		STATICFILES_DIRS = [STATIC_DIR, ]
+
+sudo apt-get install apache2
+sudo apt-get install libapache2-mod-wsgi-py3
+cd /etc/apache2/sites-available/
+sudo cp 000-default.conf smartblister.conf
+sudo vi smartblister.conf
+
+	αλλάζω το smartblister.conf:
+
+sudo a2ensite smartblister.conf
+sudo a2dissite 000-default.conf
+sudo chown :www-data smartblister/db.sqlite3
+sudo chmod 664 smartblister/db.sqlite3
+sudo chown :www-data smartblister/
+sudo chown -R :www-data smartblister/media/
+sudo chmod -R 775 smartblister/media
+sudo touch /etc/config-json
+sudo ufw delete allow 8000
+sudo ufw allow http/tcp
+sudo service apache2 restart
+
+	logs για apache στο /var/log/apache2
+
+django deployment checklist
+
+sudo mkdir /etc/apache2/ssl
+cd /etc/apache2/ssl
+sudo openssl genrsa -out smartblister.gr.key 4096
+sudo openssl req -new -key smartblister.gr.key -out smartblister.gr.csr -sha512
+sudo openssl x509 -req -days 365 -in smartblister.gr.csr -signkey smartblister.gr.key -out smartblister.gr.crt -sha512
+sudo vi /etc/apache2/sites-available/smartblister-ssl.conf
+sudo a2enmod ssl
+sudo ufw allow https
+sudo a2enmode rewrite
+sudo a2ensite smartblister-ssl.conf
+sudoa2ensite apache2 restart
+
+	για τεστ:
+
+		sudo apachectl configtest
+
+
+Για να κλείνει το session μετά από κάποιον χρόνο αδράνειας
+
+pip install django-session--timeout
+
+sudo vi ~/smartblister/smartblister/settings.py
+
+	βάζω στο MIDDLEWARE_CLASSES προσθέτω:
+
+	'django_session_timeout.middleware.SessionTimeoutMiddleware',
+
+at last you need to add SESSION_EXPIRE_SECONDS at the end of settings.py:
+
+    SESSION_EXPIRE_SECONDS = 300  # 300 seconds = 5 minutes
+
+By default, the session will expire X seconds after the start of the session. To expire the session X seconds after the last activity, use the following setting:
+
+SESSION_EXPIRE_AFTER_LAST_ACTIVITY = True
+
+also add:
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True

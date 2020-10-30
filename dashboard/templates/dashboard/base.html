@@ -38,6 +38,13 @@
                   <a class="dropdown-item" href="{% url 'doctor:monitoring_request' %}">Αίτηση πρόσβασης smartblister</a>
                 </div>
               </li>
+            {% elif user.userprofile.is_pharmacist %}
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">Ασθενείς</a>
+                <div class="dropdown-menu">
+                  <a class="dropdown-item" href="{% url 'pharmacist:charge_init' %}">Χρέωση smartblister</a>
+                </div>
+              </li>
             {% endif %}
             <li class="nav-item dropdown">
               <a class="nav-link dropdown-toggle" href="#" id="navbardrop" data-toggle="dropdown">{{ user.last_name }} {{ user.first_name }}</a>

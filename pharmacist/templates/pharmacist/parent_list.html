@@ -1,0 +1,78 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+	<div class="content-section">
+		<div class="container mb-4">
+			<legend class="border-bottom mb-4">Χρέωση smartblister σε ασθενή</legend>
+			<button type="button mb-4" class="btn btn-outline-info" data-toggle="modal" data-target="#myModal">Αναζήτηση Ασθενούς</button>
+			<!-- The Modal -->
+  			<div class="modal fade" id="myModal">
+    			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+      				<div class="modal-content">
+      
+        				<!-- Modal Header -->
+        				<div class="modal-header">
+          					<h3 class="modal-title">Αναζήτηση Ασθενούς</h3>
+          					<button type="button" class="close" data-dismiss="modal">×</button>
+        				</div>
+        
+       	 				<!-- Modal body -->
+        				<div class="modal-body">
+          					<form method="POST">
+								{% csrf_token %}
+								<fieldset class="form-group">
+									<!--<legend class="border-bottom mb-4">Αίτηση πρόσβασης σε στοιχεία smartblister ασθενούς</legend>-->
+									{{ form|crispy }}
+								</fieldset>
+								<div class="form-group d-flex flex-row-reverse">
+									<button class="btn btn-outline-info ml-3" type="submit">Αναζήτηση</button>
+									<button type="button" class="btn btn-outline-danger" data-dismiss="modal">Άκυρο</button>
+								</div>
+							</form>
+        				</div>
+        
+        				<!-- Modal footer 
+        				<div class="modal-footer">
+          					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        				</div>-->
+      				</div>
+    			</div>
+  			</div>
+		</div>
+		<div class="container">
+			<div class="table-responsive">
+				<table class="table">
+    				<thead class="thead-light">
+    					<tr>
+       						<th>Επώνυμο</th>
+       						<th>Όνομα</th>
+       						<th>Πατρώνυμο</th>
+       						<th>ΑΜΚΑ</th>
+       						<th></th>
+    					</tr>
+    				</thead>
+    				<tbody>
+    				{% if users == None or not users.exists %}
+    					<tr>
+    						<th colspan="4">Δεν υπάρχουν δεδομένα</th>
+      					</tr>
+    				{% else %}
+    					{% for user in users %}
+      						<tr>
+      							<form>
+									{% csrf_token %}	
+        							<td>{{ user.user.last_name }}</a></td>
+        							<td>{{ user.user.first_name }}</td>
+        							<td>{{ user.father_name }}</td>
+        							<td>{{ user.amka }} </td>
+        							<td><div class="d-flex flex-row-reverse"><a href="{% url 'pharmacist:charge' user.user.id %}" class="btn btn-outline-info btn-sm">Χρέωση</a></td>
+        						</form>
+      						</tr>
+      					{% endfor %}
+      				{% endif %}
+    				</tbody>
+  				</table>
+			</div>
+		</div>
+	</div>
+{% endblock %}

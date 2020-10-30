@@ -11,6 +11,10 @@ https://docs.djangoproject.com/en/3.0/ref/settings/
 """
 
 import os
+import json
+
+with open('/etc/config.json') as config_file:
+    config = json.load(config_file)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,12 +27,14 @@ MEDIA_DIR = os.path.join(BASE_DIR,'media')
 # See https://docs.djangoproject.com/en/3.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+#SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
+SECRET_KEY = config['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['10.0.1.142','147.102.213.13']
+ALLOWED_HOSTS = []
+ALLOWED_HOSTS.append(config.get('HOST'))
 
 
 # Application definition
@@ -43,6 +49,7 @@ INSTALLED_APPS = [
     'dashboard',
     'users',
     'doctor',
+    'pharmacist',
     'crispy_forms',
 ]
 
@@ -62,7 +69,7 @@ ROOT_URLCONF = 'smartblister.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [TEMPLATE_DIR,],
+        'DIRS': [],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -125,6 +132,8 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.0/howto/static-files/
 
+#STATIC_ROOT = STATIC_DIR
+
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [STATIC_DIR, ]
@@ -147,9 +156,11 @@ EMAIL_PORT = 587
 
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+#EMAIL_HOST_USER = os.environ.get('EMAIL_USER')
+EMAIL_HOST_USER = config.get('EMAIL_USER')
 
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+#EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_PASS')
+EMAIL_HOST_PASSWORD = config.get('EMAIL_PASS')
 
 SESSION_EXPIRE_SECONDS = 300  # 300 seconds = 5 minutes
 

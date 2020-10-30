@@ -1,0 +1,65 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+<style>
+	th, td {
+  		padding: 10px;
+	}
+	input {
+  		width: 100%;
+  		padding: 5px;
+  		margin: 8px 0;
+  		border: 2px solid #5bc0de;
+  		border-radius: 5px;
+	}
+
+  select {
+      width: 100%;
+      padding: 5px;
+      margin: 8px 0;
+      border: 2px solid #5bc0de;
+      border-radius: 5px;
+  }
+</style>
+<div class="content-section">
+	<h3>{{ patient }}</h3><br>
+	<h5>Χρεωμένα blisters</h5>
+	<form method="post">
+		{% csrf_token %}
+    	{{ formset.management_form }}
+    	<div class="table-responsive">
+  			<table class="table">
+  				<thead>
+      				<tr>
+       		 			<th>Σειριακός Αριθμός</th>
+       	 				<th>Ημ/νία Χρέωσης</th>
+        				<th>Πάθηση</th>
+                <th>Φάρμακο</th>
+                <th>Πλήθος</th>
+                <th>Συχνότητα</th>
+        				<th>Διαγραφή</th>
+      				</tr>
+    			</thead>
+    			<tbody>
+  				{% for form in formset %}
+  					{{ form.id }}
+  					<tr>
+  						<td>{{ form.serial }}</td>
+  						<td>{{ form.charge_date }}</td>
+  						<td>{{ form.desease }}</td>
+              <th>{{ form.medicine }}</th>
+              <th>{{ form.quantity }}</th>
+              <th>{{ form.frequency }}</th>
+  						<td>{{ form.DELETE }}</td>
+    				</tr>
+    			{% endfor %}
+    			</tbody>
+  			</table>
+  			<!--<div class="float-right">-->
+  			<div>
+  				<button class="btn btn-info ml-3" type="submit">Εγγραφή</button>
+  			</div>
+		</div> 
+	</form>
+</div>
+{% endblock %}
