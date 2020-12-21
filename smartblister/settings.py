@@ -50,7 +50,9 @@ INSTALLED_APPS = [
     'users',
     'doctor',
     'pharmacist',
+    'api',
     'crispy_forms',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
