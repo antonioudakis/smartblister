@@ -3,8 +3,10 @@ from django.shortcuts import render
 
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-from .serializers import TaskSerializer
+from rest_framework import status
+from .serializers import TaskSerializer, ChargeSerializer
 from .models import Task
+from pharmacist.models import Charge
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -19,6 +21,17 @@ def apiOverview(request):
 
 	#return JsonResponse("API BASE POINT", safe=False)
 	return Response(api_urls)
+
+
+@api_view(['GET'])
+def status(request, pk):
+	try:
+		blister = Charge.objects.get(serial=pk)
+		serializer = ChargeSerializer(blister, many=False)
+		return Response(serializer.data, status=200)
+	except Charge.DoesNotExist:
+		return Response("Not found", status=404)
+	
 
 @api_view(['GET'])
 def taskList(request):
@@ -39,7 +52,7 @@ def taskCreate(request):
 	if serializer.is_valid():
 		serializer.save()
 
-	return Response(serializer.data)
+	return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 @api_view(['POST'])
 def taskUpdate(request, pk):
@@ -54,6 +67,8 @@ def taskUpdate(request, pk):
 @api_view(['DELETE'])
 def taskDelete(request, pk):
 	task = Task.objects.get(id=pk)
+	serializer = TaskSerializer(task, many=False)
 	task.delete()
 
-	return Response('Item successfully delete!')
+	#return Response('Item successfully delete!')
+	return Response(serializer.data, status=status.HTTP_200_OK)
