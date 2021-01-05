@@ -22,6 +22,9 @@ def apiOverview(request):
 	#return JsonResponse("API BASE POINT", safe=False)
 	return Response(api_urls)
 
+@api_view(['GET'])
+def service(request):
+	return Response("Smartblister Rest Service is Up and Running", status=200)
 
 @api_view(['GET'])
 def status(request, pk):
