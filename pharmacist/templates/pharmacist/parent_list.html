@@ -40,39 +40,76 @@
   			</div>
 		</div>
 		<div class="container">
+      {% if patient == None %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>Επώνυμο</th>
+              <th>Όνομα</th>
+              <th>Πατρώνυμο</th>
+              <th>ΑΜΚΑ</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th colspan="5">Δεν υπάρχουν δεδομένα</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {% else %}
 			<div class="table-responsive">
 				<table class="table">
-    				<thead class="thead-light">
-    					<tr>
-       						<th>Επώνυμο</th>
-       						<th>Όνομα</th>
-       						<th>Πατρώνυμο</th>
-       						<th>ΑΜΚΑ</th>
-       						<th></th>
-    					</tr>
-    				</thead>
-    				<tbody>
-    				{% if users == None or not users.exists %}
-    					<tr>
-    						<th colspan="4">Δεν υπάρχουν δεδομένα</th>
-      					</tr>
-    				{% else %}
-    					{% for user in users %}
-      						<tr>
-      							<form>
-									{% csrf_token %}	
-        							<td>{{ user.user.last_name }}</a></td>
-        							<td>{{ user.user.first_name }}</td>
-        							<td>{{ user.father_name }}</td>
-        							<td>{{ user.amka }} </td>
-        							<td><div class="d-flex flex-row-reverse"><a href="{% url 'pharmacist:charge' user.user.id %}" class="btn btn-outline-info btn-sm">Χρέωση</a></td>
-        						</form>
-      						</tr>
-      					{% endfor %}
-      				{% endif %}
-    				</tbody>
-  				</table>
-			</div>
+    			<thead class="thead-light">
+    				<tr>
+       				<th>Επώνυμο</th>
+       				<th>Όνομα</th>
+       				<th>Πατρώνυμο</th>
+       				<th>ΑΜΚΑ</th>
+       				<th></th>
+    				</tr>
+    			</thead>
+    			<tbody>
+            <tr>
+              <form>
+                {% csrf_token %}
+                <td>{{ patient.user.last_name }}</td>
+                <td>{{ patient.user.first_name }}</td>
+                <td>{{ patient.user.userprofile.father_name }}</td>
+                <td>{{ patient.user.userprofile.amka }} </td>
+                <td><div class="d-flex flex-row-reverse"><a href="{% url 'pharmacist:chargeBlister' patient.user.id %}" class="btn btn-outline-info btn-sm">Χρέωση</a></div></td>
+      				</form>
+    				</tr>
+            </tbody>
+        </table>
+      </div>
+      <br>
+      <div class="text-center"><h5>Χρεωμένα Blisters</h5></div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>A/A</th>
+              <th>Σειριακός Αριθμός</th>
+              <th>Ημ/νία Χρέωσης</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for blister in blisters %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ blister.serial }}</td>
+            <td>{{ blister.charge_date }}</td>
+            <td></td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% endif %}		
 		</div>
 	</div>
 {% endblock %}

@@ -44,7 +44,7 @@ ul {
 .content-section {
 	background: #ffffff;
 	padding: 10px 20px;
-	border: 1px solid #dddddd;
+	border: 2px solid #dddddd;
 	border-radius: 3px;
 	margin-bottom: 20px;
 }
@@ -99,4 +99,22 @@ a.article-title:hover {
 th, td {
 	padding: 10px;
 }
+
+input {
+      width: 100%;
+      padding: 2px;
+      border: none;
+      /*margin: 1px 0px;
+      border: 2px solid #5bc0de;
+      border-radius: 5px;*/
+}
+
+select {
+      width: 100%;
+      padding: 2px;
+      border: none;
+      /*margin: 1px 0px;
+      border: 2px solid #5bc0de;
+      border-radius: 5px;*/
+  }
 	

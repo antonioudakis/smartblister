@@ -6,17 +6,19 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializers import TaskSerializer, ChargeSerializer
 from .models import Task
-from pharmacist.models import Charge
+from pharmacist.models import Blister
 
 @api_view(['GET'])
 def apiOverview(request):
 	#return JsonResponse("API BASE POINT", safe=False)
 	api_urls = {
-		'List':'/task-list/',
-		'Detail View':'/tast-detail/<str:pk>/',
-		'Create':'/task-create/',
-		'Update':'/task-update/<str:pk>/',
-		'Delete':'/task-delete/<str:pk>/',
+		#'List':'/task-list/',
+		#'Detail View':'/tast-detail/<str:pk>/',
+		#'Create':'/task-create/',
+		#'Update':'/task-update/<str:pk>/',
+		#'Delete':'/task-delete/<str:pk>/',
+		'Service':'/service/',
+		'Status':'/status/<str:pk>/',
 	}
 
 	#return JsonResponse("API BASE POINT", safe=False)
@@ -29,10 +31,10 @@ def service(request):
 @api_view(['GET'])
 def status(request, pk):
 	try:
-		blister = Charge.objects.get(serial=pk)
+		blister = Blister.objects.get(serial=pk)
 		serializer = ChargeSerializer(blister, many=False)
 		return Response(serializer.data, status=200)
-	except Charge.DoesNotExist:
+	except ChargeBlister.DoesNotExist:
 		return Response("Not found", status=404)
 	
 

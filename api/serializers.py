@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Task
-from pharmacist.models import Charge
+from pharmacist.models import Blister
 
 class TaskSerializer(serializers.ModelSerializer):
 	class Meta:
@@ -9,5 +9,5 @@ class TaskSerializer(serializers.ModelSerializer):
 
 class ChargeSerializer(serializers.ModelSerializer):
 	class Meta:
-		model = Charge
+		model = Blister
 		fields = '__all__'

@@ -1,4 +1,6 @@
 from django.contrib import admin
-from .models import Charge
+from .models import Blister, Prescription, BlisterPrescription
 
-admin.site.register(Charge)
+admin.site.register(Blister)
+admin.site.register(Prescription)
+admin.site.register(BlisterPrescription)
