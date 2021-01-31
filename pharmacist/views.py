@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Blister
+from .models import Blister,BlisterPrescription
 from users.models import UserProfile,PatientProfile
-from .forms import ChildFormset, PatientSearchForm, BlisterAddForm
+from .forms import ChildFormset, PatientSearchForm, BlisterAddForm, BlisterPrescriptionForm
 from django.contrib import messages 
 
 @login_required
@@ -41,7 +41,6 @@ def blister(request):
 				patient = None
 				blisters = None
 		else:
-			print("form not valid")
 			patient = None
 			blisters = None
 	else:
@@ -82,7 +81,7 @@ def chargedBlisters(request,patient_id):
 		form1 = BlisterAddForm()
 		try:
 			patient = PatientProfile.objects.get(id=patient_id)
-			blisters = patient.blister_set.all()
+			blisters = patient.blister_set.all().order_by('-charge_date')
 		except PatientProfile.DoesNotExist:
 			patient = None
 			blisters = None
@@ -117,6 +116,7 @@ def addBlister(request,patient_id):
 		if form.is_valid():
 			blister = form.save(commit=False)
 			blister.patient = patient
+			blister.pharmacist = request.user.pharmacistprofile
 			blister.save()
 			blisters = patient.blister_set.all().order_by('-charge_date')
 			#messages.success(request,f'To blister αποθηκεύτηκε')
@@ -135,6 +135,42 @@ def addBlister(request,patient_id):
 	}
 	
 	return redirect('pharmacist:chargedBlisters', patient_id=patient.id)
+
+@login_required
+def blisterPrescription(request,patient_id,blister_id):
+	if request.method == 'POST':
+		form = BlisterPrescriptionForm(request.POST)
+		blister = Blister.objects.get(id=blister_id)
+		if form.is_valid():
+			blisterPrescription = form.save(commit=False)
+			blisterPrescription.blister = blister
+			patient = PatientProfile.objects.get(id=patient_id)
+			blisterPrescription.save()
+			#messages.success(request,f'To blister αποθηκεύτηκε')
+			return redirect('pharmacist:chargedBlisters', patient_id=patient.id)
+		else:
+			print("not valid form")
+			print(form.errors)
+
+	else:
+		print("am in here?")
+		patient = PatientProfile.objects.get(id=patient_id)
+		print(patient.user.username)
+		blister = Blister.objects.get(id=blister_id)
+		print(blister.patient.user.last_name)
+		form = BlisterPrescriptionForm()
+		#form.fields['prescription'].queryset=Prescription.objects.filter(patient=patient).order_by('-date_issued')
+		
+
+
+	context = {
+		'title':'Σύνδεση blister με συνταγή',
+		'form':form,
+		'patient':patient,
+		'blister': blister
+	}
+	
+	return render(request,'pharmacist/blister_prescription.html', context)
 
 	
 

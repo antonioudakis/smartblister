@@ -3,7 +3,8 @@ from django.utils import timezone
 from django import forms
 from django.contrib.auth.models import User
 from users.models import PatientProfile
-from .models import Blister, Prescription
+from .models import Blister,BlisterPrescription
+from doctor.models import Prescription
 #from django.contrib.admin.widgets import AdminDateWidget
 #from django.forms.fields import DateField
 
@@ -25,44 +26,16 @@ class BlisterAddForm(forms.ModelForm):
 		model = Blister
 		fields = ['serial','charge_date']
 
-class Prescription(forms.ModelForm):
-	quantity_choices = (
-		(1,'1'),
-		(2,'2'),
-		(3,'3')
-	)
 
-	frequency_choices = (
-		(1,'1 φορά την ημέρα'),
-		(2,'2 φορές την ημέρα'),
-		(3,'3 φορές την ημέρα'),
-		(4,'4 φορές την ημέρα'),
-		(5,'1 φορά την εβδομάδα'),
-		(6,'2 φορές την εβδομάδα'),
-		(7,'3 φορές την εβδομάδα')
-	)
-
-	duration_choices = (
-		(1,'για 7 ημέρες'),
-		(2,'για 10 ημέρες'),
-		(3,'για 2 εβδομάδες'),
-		(4,'για 1 μήνα'),
-		(5,'για 2 μήνες'),
-		(6,'για 3 μήνες'),
-		(7,'για 6 μήνες'),
-		(8,'για ένα έτος')
-	)
-
-	date_issued = forms.DateField(label='Ημ/νία Έκδοσης')
-	medicine = forms.CharField(label='Φάρμακο', max_length=255)
-	quantity = forms.ChoiceField(label='Ποσότητα', choices=quantity_choices)
-	dosage = forms.ChoiceField(label='Δοσολογία', choices=quantity_choices)
-	frequency = forms.ChoiceField(label='Συχνότητα', choices=frequency_choices)
-	duration = forms.ChoiceField(label='Διάρκεια', choices=duration_choices)
+class BlisterPrescriptionForm(forms.ModelForm):
+	#prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.none())
+	prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.all().order_by('-date_issued'))
 
 	class Meta:
-		model = Prescription
-		fields = '__all__'
+		model = BlisterPrescription
+		fields = ['prescription']
+
+
 
 
 

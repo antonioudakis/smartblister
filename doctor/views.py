@@ -1,9 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .forms import MonitoringRequestForm, PatientSearchForm
+from .forms import MonitoringRequestForm, PatientSearchForm, PrescriptionAddForm
 from django.core.mail import send_mail
 from users.models import PatientProfile, DoctorProfile, UserProfile
-from doctor.models import MonitoringRequest
+from doctor.models import MonitoringRequest, Prescription
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
@@ -96,4 +96,118 @@ def monitoring_accept(request,token):
 		'role':'patient',
 	}
 	return render(request,'dashboard/index.html',context)
+
+@login_required
+def prescription(request):
+	if request.method == 'POST':
+		form = PatientSearchForm(request.POST)
+		form1 = PrescriptionAddForm(request.POST)
+		if form.is_valid():
+			amka = form.cleaned_data['amka']
+			try:
+				patient = PatientProfile.objects.get(user__userprofile__amka=amka)
+				prescriptions = patient.prescription_set.all().order_by('-date_issued')
+			except PatientProfile.DoesNotExist:
+				patient = None
+				prescriptions = None
+		else:
+			patient = None
+			prescription = None
+	else:
+		form = PatientSearchForm()
+		form1 = PrescriptionAddForm()
+		patient = None
+		prescriptions = None
+
+
+	context = {
+		'title':'Συνταγογράφηση',
+		'form':form,
+		'form1':form1,
+		'patient':patient,
+		'prescriptions': prescriptions
+	}
+	
+	return render(request,'doctor/prescription.html', context)
+
+@login_required
+def chargedPrescriptions(request,patient_id):
+	if request.method == 'POST':
+		form = PatientSearchForm(request.POST)
+		form1 = PrescriptionAddForm(request.POST)
+		if form.is_valid():
+			amka = form.cleaned_data['amka']
+			try:
+				patient = PatientProfile.objects.get(user__userprofile__amka=amka)
+				prescriptions = patient.prescription_set.all().order_by('-date_issued')
+			except PatientProfile.DoesNotExist:
+				patient = None
+				prescriptions = None
+		else:
+			patient = None
+			prescriptions = None
+	else:
+		form = PatientSearchForm()
+		form1 = PrescriptionAddForm()
+		try:
+			patient = PatientProfile.objects.get(id=patient_id)
+			prescriptions = patient.prescription_set.all().order_by('-date_issued')
+		except PatientProfile.DoesNotExist:
+			patient = None
+			blisters = None
+
+
+	context = {
+		'title':'Συνταγογράφηση',
+		'form':form,
+		'form1':form1,
+		'patient':patient,
+		'prescriptions': prescriptions
+	}
+	
+	return render(request,'doctor/prescription.html', context)
+
+@login_required
+def deletePrescription(request,prescription_id):
+	try:
+		prescription = Prescription.objects.get(id=prescription_id)
+		patient = prescription.patient
+		prescription.delete()
+		return redirect('doctor:chargedPrescriptions', patient_id=patient.id)
+	except Prescription.DoesNotExist:
+		messages.warning(request,f'Δεν υπάρχει συνταγή με τα στοιχεία που δώσατε')
+		return redirect('doctor:prescription')
+
+@login_required
+def addPrescription(request,patient_id):
+	if request.method == 'POST':
+		form = PrescriptionAddForm(request.POST)
+		patient = PatientProfile.objects.get(id=patient_id)
+		if form.is_valid():
+			print("valid form")
+			prescription = form.save(commit=False)
+			prescription.patient = patient
+			prescription.doctor = request.user.doctorprofile
+			prescription.save()
+			prescriptions = patient.prescription_set.all().order_by('-date_issued')
+			#messages.success(request,f'To blister αποθηκεύτηκε')
+		else:
+			print("not valid form")
+			print(form.errors)
+
+	else:
+		print("not posted")
+		form = PrescriptionAddForm()
+		patient = PatientProfile.objects.get(id=patient_id)
+		prescriptions = patient.prescription_set.all()
+
+
+	context = {
+		'title':'Συνταγογράφηση Ασθενούς',
+		'form':form,
+		'patient':patient,
+		'prescriptions': prescriptions
+	}
+	
+	return redirect('doctor:chargedPrescriptions', patient_id=patient.id)
 

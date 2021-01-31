@@ -101,7 +101,12 @@
             <td>{{ blister.serial }}</td>
             <td>{{ blister.charge_date }}</td>
 
-            <td><div class="d-flex flex-row-reverse"><button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#myModal">Συνταγή</button></div></td>
+            <!--<td><div class="d-flex flex-row-reverse"><button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#myModal2">Συνταγή</button></div></td>-->
+            <td>
+              <div class="d-flex flex-row-reverse">
+                <a href="{% url 'pharmacist:blisterPrescription' patient.id blister.id %}" class="btn btn-outline-info btn-sm">Συνταγή</a>
+              </div>
+            </td>
             <td>
               <div class="d-flex flex-row-reverse">
                 <form action="{% url 'pharmacist:deleteBlister' blister.id %}" method="post">
@@ -146,6 +151,7 @@
           </div>
         </div>
         <!-- The Modal -->
+        
       {% endif %}   
     </div>
   </div>

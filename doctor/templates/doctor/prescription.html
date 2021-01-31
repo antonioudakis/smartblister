@@ -1,0 +1,202 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+	<div class="content-section">
+		<div class="container mb-4">
+			<legend class="border-bottom mb-4">Συνταγογράφηση ασθενούς</legend>
+			<button type="button mb-4" class="btn btn-outline-info" data-toggle="modal" data-target="#myModal">Αναζήτηση Ασθενούς</button>
+			<!-- The Modal -->
+  			<div class="modal fade" id="myModal">
+    			<div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+      				<div class="modal-content">
+      
+        				<!-- Modal Header -->
+        				<div class="modal-header">
+          					<h3 class="modal-title">Αναζήτηση Ασθενούς</h3>
+          					<button type="button" class="close" data-dismiss="modal">×</button>
+        				</div>
+        
+       	 				<!-- Modal body -->
+        				<div class="modal-body">
+          				<form method="POST">
+								    {% csrf_token %}
+								    <fieldset class="form-group">
+									   <!--<legend class="border-bottom mb-4">Αίτηση πρόσβασης σε στοιχεία smartblister ασθενούς</legend>-->
+									   {{ form|crispy }}
+								    </fieldset>
+								    <div class="form-group d-flex flex-row-reverse">
+									   <button class="btn btn-outline-info ml-3" type="submit">Αναζήτηση</button>
+									   <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Άκυρο</button>
+								    </div>
+							     </form>
+        				</div>
+        
+        				<!-- Modal footer 
+        				<div class="modal-footer">
+          					<button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+        				</div>-->
+      				</div>
+    			</div>
+  			</div>
+        <!-- The Modal -->
+		</div>
+		<div class="container">
+      {% if patient == None %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>Επώνυμο</th>
+              <th>Όνομα</th>
+              <th>Πατρώνυμο</th>
+              <th>ΑΜΚΑ</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th colspan="5">Δεν υπάρχουν δεδομένα</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="table-responsive">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>Επώνυμο</th>
+              <th>Όνομα</th>
+              <th>Πατρώνυμο</th>
+              <th>ΑΜΚΑ</th>
+              <th>Κινητό</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <form>
+                {% csrf_token %}
+                <td>{{ patient.user.last_name }}</td>
+                <td>{{ patient.user.first_name }}</td>
+                <td>{{ patient.user.userprofile.father_name }}</td>
+                <td>{{ patient.user.userprofile.amka }} </td>
+                <td>{{ patient.user.userprofile.cell_phone}}</td>
+              </form>
+            </tr>
+            </tbody>
+        </table>
+      </div>
+      <br>
+      <div class="text-center"><h5>Χορηγούμενες συνταγές</h5></div>
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <!--<th>A/A</th>-->
+              <th>Πάθηση</th>
+              <th>Φάρμακο</th>
+              <th>Ποσότητα</th>
+              <th>Δόση<br>σε Δισκία</th>
+              <th>Συχνότητα</th>
+              <th>Διάρκεια</th>
+              <th>Ημ/νία<br>Συνταγογράφησης</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+          {% for prescription in prescriptions %}
+          <tr>
+            <!--<td>{{ forloop.counter }}</td>-->
+            <td>{{ prescription.illness }}</td>
+            <td>{{ prescription.medicine }}</td>
+            <td>{{ prescription.quantity }}</td>
+            <td>{{ prescription.dosage }}</td>
+            <td>{{ prescription.frequency.description }}</td>
+            <td>{{ prescription.duration.description }}</td>
+            <td>{{ prescription.date_issued }}</td>
+            <td>
+              <div class="d-flex flex-row-reverse">
+                <form action="{% url 'doctor:deletePrescription' prescription.id %}" method="post">
+                  {% csrf_token %}
+                  <input class="btn btn-outline-danger btn-sm" type="submit" value="Διαγραφή">
+                </form>
+              </div>
+            </td>
+          </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <div class="d-flex flex-row"><button type="button" class="btn btn-outline-info" data-toggle="modal" data-target="#myModal1">Νέα συνταγή</button></div>
+      <!-- The Modal -->
+        <div class="modal fade" id="myModal1">
+          <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered">
+            <div class="modal-content">
+      
+              <!-- Modal Header -->
+              <div class="modal-header">
+                 <h3 class="modal-title">Δημιουργία Συνταγής</h3>
+                 <button type="button" class="close" data-dismiss="modal">×</button>
+              </div>
+        
+              <!-- Modal body -->
+              <div class="modal-body">
+                 <form action="{% url 'doctor:addPrescription' patient.id  %}" method="POST">
+                   {% csrf_token %}
+                 <!-- <fieldset class="form-group">-->
+                    <!--<legend class="border-bottom mb-4">Αίτηση πρόσβασης σε στοιχεία smartblister ασθενούς</legend>-->
+
+                 <!--   {{ form1.date_issued|as_crispy_field }}
+                    {{ form1.illness|as_crispy_field }}
+                    {{ form1.medicine|as_crispy_field }}
+                    {{ form1.quantity|as_crispy_field }}
+                    {{ form1.dosage|as_crispy_field }}
+                    {{ form1.frequency|as_crispy_field }}
+                    {{ form1.duration|as_crispy_field }}
+                  </fieldset>-->
+                  <div class="form-row">
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.date_issued|as_crispy_field }}
+                    </div>
+                    <div class="form=group col-md-6 mb-0">
+                     
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.illness|as_crispy_field }}
+                    </div>
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.medicine|as_crispy_field }}
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.quantity|as_crispy_field }}
+                    </div>
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.dosage|as_crispy_field }}
+                    </div>
+                  </div>
+                  <div class="form-row">
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.frequency|as_crispy_field }}
+                    </div>
+                    <div class="form=group col-md-6 mb-0">
+                      {{ form1.duration|as_crispy_field }}
+                    </div>
+                  </div>
+                  <div class="form-group d-flex flex-row-reverse">
+                    <button class="btn btn-outline-info ml-3" type="submit">Αποθήκευση</button>
+                    <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Άκυρο</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- The Modal -->
+      {% endif %}   
+    </div>
+  </div>
+{% endblock %}

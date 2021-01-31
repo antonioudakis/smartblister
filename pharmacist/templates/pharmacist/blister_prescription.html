@@ -1,0 +1,50 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+  <div class="content-section">
+    <div class="container mb-4">
+      <legend class="border-bottom mb-4">Σύνδεση blister με Συνταγή</legend>
+      
+    </div>
+    <div class="container">
+       <div class="table-responsive">
+        <table class="table">
+          <thead class="thead-light">
+            <tr>
+              <th>Επώνυμο</th>
+              <th>Όνομα</th>
+              <th>Πατρώνυμο</th>
+              <th>ΑΜΚΑ</th>
+              <th>Κινητό</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+                <td>{{ patient.user.last_name }}</td>
+                <td>{{ patient.user.first_name }}</td>
+                <td>{{ patient.user.userprofile.father_name }}</td>
+                <td>{{ patient.user.userprofile.amka }} </td>
+                <td>{{ patient.user.userprofile.cell_phone}}</td>
+            </tr>
+            </tbody>
+        </table>
+      </div>
+      <br>
+      <div class="text-center"><h5>Χρεωμένo Blister {{ blister.serial }}</h5></div>
+      <br>
+      <div>
+        <form method="POST">
+          {% csrf_token %}
+          <fieldset class="form-group">
+           <!--<legend class="border-bottom mb-4">Αίτηση πρόσβασης σε στοιχεία smartblister ασθενούς</legend>-->
+          {{ form|crispy }}
+          </fieldset>
+          <div class="form-group d-flex flex-row-reverse">
+            <button class="btn btn-outline-info ml-3" type="submit">Σύνδεση</button>
+            <a href="{% url 'pharmacist:chargedBlisters' patient.id %}" class="btn btn-outline-danger">Άκυρο</a>
+          </div>
+         </form>
+       </div>
+      </div>
+  </div>
+{% endblock %}
