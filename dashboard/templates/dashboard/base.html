@@ -8,6 +8,7 @@
 
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
   <link rel="stylesheet" type="text/css" href="{% static 'dashboard/css/main.css' %}">
   {% if title %}
     <title>{{ title }}</title>
@@ -30,6 +31,7 @@
           <li class="nav-item"><a class="nav-link" href="#">link 2</a></li>
         </ul>-->
         <ul class="navbar-nav ml-auto">
+          <li class="nav-item"><a class="nav-link" href="https://letscode.gr/static/download/Rest.apk"><i class="fas fa-mobile-alt p-1" style="font-size:20px;"></i>Rest APP</a></li>
           {% if user.is_authenticated %}
             {% if user.userprofile.is_doctor %}
               <li class="nav-item dropdown">

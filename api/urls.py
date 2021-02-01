@@ -10,4 +10,5 @@ urlpatterns = [
 	path('task-delete/<str:pk>/', views.taskDelete, name='task-delete'),
 	path('status/<str:pk>/', views.status, name='status'),
 	path('service/', views.service, name='service'),
+	path('pillRemoved/<str:serial>/', views.pillRemoved, name='pillRemoved'),
 ]

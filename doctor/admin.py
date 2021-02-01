@@ -5,3 +5,4 @@ admin.site.register(MonitoringRequest)
 admin.site.register(Prescription)
 admin.site.register(Frequency)
 admin.site.register(Duration)
+

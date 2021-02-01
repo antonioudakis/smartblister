@@ -67,3 +67,10 @@ class Prescription(models.Model):
 
 	def __str__(self):
 		return self.medicine+' '+str(self.date_issued)
+
+"""class BlisterAction(models.Model):
+	blisterPrescription = models.ForeignKey(BlisterPrescription, on_delete=models.PROTECT)
+	date_removed = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.blisterPrescription.blister.serial+' '+str(self.date_removed)"""

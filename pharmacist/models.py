@@ -32,11 +32,9 @@ class BlisterPrescription(models.Model):
 		return self.blister.serial+' '+self.prescription.medicine+' '+str(self.prescription.date_issued)
 
 
-#class Child(models.Model):
-#	name = models.CharField(max_length=250)
-#	parent = models.ForeignKey(Parent, on_delete=models.CASCADE)
-#	class Meta:
-#		verbose_name = "Child"
-#		verbose_name_plural = "Children"
-#	def __str__(self):
-#		return self.name
+class BlisterAction(models.Model):
+	blisterPrescription = models.ForeignKey(BlisterPrescription, on_delete=models.PROTECT)
+	date_removed = models.DateTimeField(default=timezone.now)
+
+	def __str__(self):
+		return self.blisterPrescription.blister.serial+' '+str(self.date_removed)

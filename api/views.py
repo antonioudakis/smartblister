@@ -4,9 +4,9 @@ from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import TaskSerializer, ChargeSerializer
+from .serializers import TaskSerializer, ChargeSerializer, BlisterSerializer, BlisterPrescriptionSerializer, BlisterActionSerializer
 from .models import Task
-from pharmacist.models import Blister
+from pharmacist.models import Blister, BlisterPrescription, BlisterAction
 
 @api_view(['GET'])
 def apiOverview(request):
@@ -19,6 +19,7 @@ def apiOverview(request):
 		#'Delete':'/task-delete/<str:pk>/',
 		'Service':'/service/',
 		'Status':'/status/<str:pk>/',
+		'PillRemoved':'/pillRemoved/<str:serial>/',
 	}
 
 	#return JsonResponse("API BASE POINT", safe=False)
@@ -32,10 +33,32 @@ def service(request):
 def status(request, pk):
 	try:
 		blister = Blister.objects.get(serial=pk)
-		serializer = ChargeSerializer(blister, many=False)
+		blisterPrescription = BlisterPrescription.objects.get(blister=blister)
+		serializer = BlisterPrescriptionSerializer(blisterPrescription, many=False)
 		return Response(serializer.data, status=200)
-	except ChargeBlister.DoesNotExist:
+	except blister.DoesNotExist:
 		return Response("Not found", status=404)
+	except blisterPrescription.DoesNotExist:
+		return Response("Not found", status=404)
+
+@api_view(['POST'])
+def pillRemoved(request, serial):
+	blister = Blister.objects.get(serial=serial)
+	blisterPrescription = BlisterPrescription.objects.get(blister=blister)
+	p = BlisterAction(blisterPrescription=blisterPrescription)
+	p.save()
+	#serializer1 = BlisterPrescriptionSerializer(blisterPrescription, many=False)
+	#serializer = BlisterActionSerializer(data=serializer1)
+	
+	#if serializer.is_valid():
+	#	print("valid data")
+	#	serializer.save()
+	#else:
+	#	print("not valid")
+	#	print(serializer)
+
+	#return Response(serializer.data, status=201)
+	return Response("Η αφαίρεση δισκίου καταχωρήθηκε", status=201)
 	
 
 @api_view(['GET'])
@@ -61,13 +84,16 @@ def taskCreate(request):
 
 @api_view(['POST'])
 def taskUpdate(request, pk):
-	task = Task.objects.get(id=pk)
-	serializer = TaskSerializer(instance=task, data=request.data)
+	try:
+		task = Task.objects.get(id=pk)
+		serializer = TaskSerializer(instance=task, data=request.data)
 
-	if serializer.is_valid():
-		serializer.save()
+		if serializer.is_valid():
+			serializer.save()
 
-	return Response(serializer.data)
+		return Response(serializer.data)
+	except Task.DoesNotExist:
+		return Response("Not found - Nothing to Update", status=404)
 
 @api_view(['DELETE'])
 def taskDelete(request, pk):
