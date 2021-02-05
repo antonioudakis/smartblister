@@ -138,9 +138,13 @@ def addBlister(request,patient_id):
 
 @login_required
 def blisterPrescription(request,patient_id,blister_id):
+	blister = Blister.objects.get(id=blister_id)
 	if request.method == 'POST':
-		form = BlisterPrescriptionForm(request.POST)
-		blister = Blister.objects.get(id=blister_id)
+		try:
+			bp = BlisterPrescription.objects.get(blister=blister)
+			form = BlisterPrescriptionForm(request.POST,instance=bp)
+		except BlisterPrescription.DoesNotExist:
+			form = BlisterPrescriptionForm(request.POST)
 		if form.is_valid():
 			blisterPrescription = form.save(commit=False)
 			blisterPrescription.blister = blister
@@ -153,14 +157,12 @@ def blisterPrescription(request,patient_id,blister_id):
 			print(form.errors)
 
 	else:
-		print("am in here?")
 		patient = PatientProfile.objects.get(id=patient_id)
-		print(patient.user.username)
-		blister = Blister.objects.get(id=blister_id)
-		print(blister.patient.user.last_name)
-		form = BlisterPrescriptionForm()
-		#form.fields['prescription'].queryset=Prescription.objects.filter(patient=patient).order_by('-date_issued')
-		
+		try:
+			bp = BlisterPrescription.objects.get(blister=blister)
+			form = BlisterPrescriptionForm(instance=bp)
+		except BlisterPrescription.DoesNotExist:
+			form = BlisterPrescriptionForm()
 
 
 	context = {

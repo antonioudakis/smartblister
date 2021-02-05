@@ -28,7 +28,9 @@ class BlisterAddForm(forms.ModelForm):
 
 
 class BlisterPrescriptionForm(forms.ModelForm):
+
 	#prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.none())
+
 	prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.all().order_by('-date_issued'))
 
 	class Meta:
