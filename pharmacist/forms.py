@@ -31,7 +31,12 @@ class BlisterPrescriptionForm(forms.ModelForm):
 
 	#prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.none())
 
-	prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.all().order_by('-date_issued'))
+	#prescription = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.filter(patient__id=patient_id).order_by('-date_issued'))
+
+	def __init__(self, *args, **kwargs):
+		patient_id = kwargs.pop('patient_id')
+		super(BlisterPrescriptionForm, self).__init__(*args, **kwargs)
+		self.fields['prescription'] = forms.ModelChoiceField(label='Συνταγή',queryset=Prescription.objects.filter(patient__id=patient_id).order_by('-date_issued'))
 
 	class Meta:
 		model = BlisterPrescription

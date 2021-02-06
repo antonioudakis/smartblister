@@ -4,6 +4,7 @@ from .forms import MonitoringRequestForm, PatientSearchForm, PrescriptionAddForm
 from django.core.mail import send_mail
 from users.models import PatientProfile, DoctorProfile, UserProfile
 from doctor.models import MonitoringRequest, Prescription
+from pharmacist.models import BlisterAction,BlisterPrescription
 from django.contrib.auth.models import User
 from django.utils import timezone
 from datetime import timedelta
@@ -129,6 +130,61 @@ def prescription(request):
 	}
 	
 	return render(request,'doctor/prescription.html', context)
+
+"""@login_required
+def actions(request):
+	if request.method == 'POST':
+		form = PatientSearchForm(request.POST)
+		form1 = BlisterAddForm(request.POST)
+		if form.is_valid():
+			amka = form.cleaned_data['amka']
+			try:
+				patient = PatientProfile.objects.get(user__userprofile__amka=amka)
+				blisters = patient.blister_set.all().order_by('-charge_date')
+			except PatientProfile.DoesNotExist:
+				patient = None
+				blisters = None
+		else:
+			patient = None
+			blisters = None
+	else:
+		form = PatientSearchForm()
+		form1 = BlisterAddForm()
+		patient = None
+		blisters = None
+
+
+	context = {
+		'title':'Χρέωση smartblister',
+		'form':form,
+		'form1':form1,
+		'patient':patient,
+		'blisters': blisters
+	}
+	
+	return render(request,'doctor/prescription_list.html', context)"""
+
+@login_required
+def actions(request,prescription_id):
+	try:
+		actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).order_by('-date_removed')
+		prescription = Prescription.objects.get(id=prescription_id)
+		patient = prescription.patient
+	except BlisterPrescription.DoesNotExist:
+		actions = None
+		prescription = None
+		patient = None
+
+	context = {
+		'title':'Φαρμακευτική Συνέπεια',
+		'actions':actions,
+		'prescription':prescription,
+		'patient':patient
+	}
+	
+	return render(request,'doctor/action_list.html', context)
+
+
 
 @login_required
 def chargedPrescriptions(request,patient_id):

@@ -1,0 +1,68 @@
+{% extends "dashboard/base.html" %}
+{% load crispy_forms_tags %}
+{% block body_block %}
+  <div class="content-section">
+    <div class="container mb-4">
+      <legend class="mb-4">Φαρμακευτική Συνέπεια Ασθενούς - {{patient.user.last_name}} {{patient.user.first_name}}</legend>
+    </div>
+    <div class="table-responsive">
+      <table class="table">
+        <thead class="thead-light">
+          <tr>
+            <!--<th>A/A</th>-->
+            <th>Πάθηση</th>
+            <th>Φάρμακο</th>
+            <th>Ποσότητα</th>
+            <th>Δόση<br>σε Δισκία</th>
+            <th>Συχνότητα</th>
+            <th>Διάρκεια</th>
+            <th>Ημ/νία<br>Συνταγογράφησης</th>
+          </tr>
+         </thead>
+         <tbody>
+          <tr>
+            <!--<td>{{ forloop.counter }}</td>-->
+            <td>{{ prescription.illness }}</td>
+            <td>{{ prescription.medicine }}</td>
+            <td>{{ prescription.quantity }}</td>
+            <td>{{ prescription.dosage }}</td>
+            <td>{{ prescription.frequency.description }}</td>
+            <td>{{ prescription.duration.description }}</td>
+            <td>{{ prescription.date_issued }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-center mt-4"><h5>Κινήσεις στο Blister</h5></div>
+    <div class="container">
+      <div class="table-responsive">
+        <table class="table">
+          <thead>
+            <tr>
+              <th>A/A</th>
+              <th>Ημ/νία Αφαίρεσης</th>
+            </tr>
+          </thead>
+          <tbody>
+          {% if actions %}
+            {% for action in actions %}
+            <tr>
+              <td>{{ forloop.counter }}</td>
+              <td>{{ action.date_removed }}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td>Δεν υπάρχουν δεδομένα</td>
+              <td></td>
+            </tr>
+          {% endif %}
+        </tbody>
+        </table>
+      </div>    
+    </div>
+    <div class="d-flex flex-row">
+        <a href="{% url 'doctor:chargedPrescriptions' patient.id %}" class="btn btn-outline-info">Επιστροφή</a>
+    </div>
+  </div>
+{% endblock %}

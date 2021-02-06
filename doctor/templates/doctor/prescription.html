@@ -86,8 +86,7 @@
             </tbody>
         </table>
       </div>
-      <br>
-      <div class="text-center"><h5>Χορηγούμενες συνταγές</h5></div>
+      <div class="text-center mt-4"><h5>Χορηγούμενες συνταγές</h5></div>
       <div class="table-responsive">
         <table class="table">
           <thead>
@@ -101,6 +100,7 @@
               <th>Διάρκεια</th>
               <th>Ημ/νία<br>Συνταγογράφησης</th>
               <th></th>
+              <tr></tr>
             </tr>
           </thead>
           <tbody>
@@ -120,6 +120,11 @@
                   {% csrf_token %}
                   <input class="btn btn-outline-danger btn-sm" type="submit" value="Διαγραφή">
                 </form>
+              </div>
+            </td>
+            <td>
+              <div class="d-flex flex-row-reverse">
+                <a href="{% url 'doctor:actions' prescription.id %}" class="btn btn-outline-success btn-sm">Συνέπεια</a>
               </div>
             </td>
           </tr>
