@@ -1,10 +1,11 @@
 from django.shortcuts import render
-#from django.http import JsonResponse
-
+from django.http import JsonResponse
+from django.db.models import Count
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import TaskSerializer, ChargeSerializer, BlisterSerializer, BlisterPrescriptionSerializer, BlisterActionSerializer
+from rest_framework import serializers
+from .serializers import TaskSerializer, ChargeSerializer, BlisterSerializer, BlisterPrescriptionSerializer, BlisterActionSerializer, RemovalSerializer
 from .models import Task
 from pharmacist.models import Blister, BlisterPrescription, BlisterAction
 
@@ -18,8 +19,10 @@ def apiOverview(request):
 		#'Update':'/task-update/<str:pk>/',
 		#'Delete':'/task-delete/<str:pk>/',
 		'Service':'/service/',
-		'Status':'/status/<str:pk>/',
+		'Status':'/status/<str:serial>/',
 		'PillRemoved':'/pillRemoved/<str:serial>/',
+		'Actions':'/actions/<int:prescription_id>/',
+		'DetailedActions':'/detailedActions/<int:prescription_id>/'
 	}
 
 	#return JsonResponse("API BASE POINT", safe=False)
@@ -58,7 +61,22 @@ def pillRemoved(request, serial):
 	#	print(serializer)
 
 	#return Response(serializer.data, status=201)
-	return Response("Η αφαίρεση δισκίου καταχωρήθηκε", status=201)
+	return Response("Η αφαίρεση δισκίου καταχωρήθηκε", status=200)
+
+@api_view(['GET'])
+def actions(request, prescription_id):
+	#actions = list(BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date'))
+	actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date')
+
+	serializer = RemovalSerializer(actions, many=True)
+	#return JsonResponse(actions, safe=False, status=201)
+	return Response(serializer.data, status=200)
+
+@api_view(['GET'])
+def detailedActions(request, prescription_id):
+	actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).order_by('-date_removed')
+	serializer = BlisterActionSerializer(actions, many=True)
+	return Response(serializer.data, status=200)
 	
 
 @api_view(['GET'])

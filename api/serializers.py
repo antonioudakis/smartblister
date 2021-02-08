@@ -54,7 +54,10 @@ class BlisterPrescriptionSerializer(serializers.ModelSerializer):
 
 
 class BlisterActionSerializer(serializers.ModelSerializer):
-	blisterprescription = BlisterPrescriptionSerializer(many=False)
 	class Meta:
 		model = BlisterAction
-		fields = ['blisterprescription']
+		fields = ['date_removed']
+
+class RemovalSerializer(serializers.Serializer):
+    date_removed__date = serializers.DateField()
+    removals = serializers.IntegerField()
