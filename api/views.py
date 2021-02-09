@@ -65,12 +65,12 @@ def pillRemoved(request, serial):
 
 @api_view(['GET'])
 def actions(request, prescription_id):
-	#actions = list(BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date'))
-	actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date')
+	data = list(BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date'))
+	#actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date')
 
-	serializer = RemovalSerializer(actions, many=True)
-	#return JsonResponse(actions, safe=False, status=201)
-	return Response(serializer.data, status=200)
+	#serializer = RemovalSerializer(actions, many=True)
+	return JsonResponse(data, safe=False, status=200)
+	#return Response(serializer.data, status=200)
 
 @api_view(['GET'])
 def detailedActions(request, prescription_id):

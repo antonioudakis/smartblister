@@ -1,6 +1,52 @@
 {% extends "dashboard/base.html" %}
 {% load crispy_forms_tags %}
 {% block body_block %}
+  <script>
+    $(document).ready(function(){
+    //var endpoint = '/api/actions/{{prescription.id}}/'
+    var endpoint = "/api/actions/{{prescription.id}}/"
+    var rest_data = []
+    var rest_labels = []
+    $.ajax({
+      method: "GET",
+      url: endpoint,
+      success: function(data){
+        for (i=0;i<data.length;i++){
+          rest_data.push(data[i].removals)
+          rest_labels.push(data[i].date_removed__date)
+        }
+        var ctx = document.getElementById('myChart');
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: rest_labels,
+                datasets: [{
+                    label: '# Αριθμός δισκίων',
+                    data: rest_data,
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+      },
+      error: function(error_data){
+        console.log("error")
+        console.log(error_data)
+      }
+    })
+  
+  })  
+  </script>
+  
+
   <div class="content-section">
     <div class="container mb-4">
       <legend class="mb-4">Φαρμακευτική Συνέπεια Ασθενούς - {{patient.user.last_name}} {{patient.user.first_name}}</legend>
@@ -33,6 +79,7 @@
         </tbody>
       </table>
     </div>
+    <canvas id="myChart" width="400" height="400"></canvas>
     <div class="text-center mt-4"><h5>Κινήσεις στο Blister</h5></div>
     <div class="container">
       <div class="table-responsive">

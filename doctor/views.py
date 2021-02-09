@@ -10,6 +10,7 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
+from django.db.models import Count
 
 @login_required
 def monitoring_request(request):
@@ -166,20 +167,31 @@ def actions(request):
 
 @login_required
 def actions(request,prescription_id):
+	labels = []
+	data = []
 	try:
 		actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).order_by('-date_removed')
 		prescription = Prescription.objects.get(id=prescription_id)
 		patient = prescription.patient
+		actionsGroupByDate = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date')
+		for act in actionsGroupByDate:
+			labels.append(act['date_removed__date'])
+			data.append(act['removals'])
+		print(labels)
+		print(data)
 	except BlisterPrescription.DoesNotExist:
 		actions = None
 		prescription = None
 		patient = None
+		actionsGroupByDate = None
 
 	context = {
 		'title':'Φαρμακευτική Συνέπεια',
 		'actions':actions,
 		'prescription':prescription,
-		'patient':patient
+		'patient':patient,
+		'labels':labels,
+		'data':data,
 	}
 	
 	return render(request,'doctor/action_list.html', context)
