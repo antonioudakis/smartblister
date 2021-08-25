@@ -10,7 +10,6 @@ from django.utils import timezone
 from datetime import timedelta
 from django.contrib import messages
 from django.shortcuts import get_object_or_404
-from django.db.models import Count
 
 @login_required
 def monitoring_request(request):
@@ -56,8 +55,8 @@ def monitoring_request_send(request):
 			subject = 'Smartblister - Αίτηση πρόσβασης στα στοιχεία του smartblister'
 			sender = EMAIL_HOST_USER
 			recipient = patient.user.email
-			plain_message = 'Ο ιατρός '+ request.user.last_name + ' '+ request.user.first_name + ' με ειδικότητα ' + doctor.speciality +' έχει αιτηθεί πρόσβαση στα στοιχεία του smartblister σας. Αν Θέλετε να κάνετε αποδοχή της αίτησης κάντε κλικ στον παρακάτω σύνδεσμο; '+host+'doctor/monitoring_accept/'+token
-			html_message = '<p>Ο ιατρός <b>'+ request.user.last_name + ' '+ request.user.first_name + '</b> με ειδικότητα <b>' + doctor.speciality +"</b> έχει αιτηθεί πρόσβαση στα στοιχεία του smartblister σας. Αν Θέλετε να κάνετε αποδοχή της αίτησης κάντε κλικ στον παρακάτω σύνδεσμο;</p><p><a href='"+host+"doctor/monitoring_accept/"+token+"/'>"+host+"doctor/monitoring_accept/"+token+"/</a></p>"
+			plain_message = 'Ο ιατρός '+ request.user.last_name + ' '+ request.user.first_name + ' με ειδικότητα ' + doctor.speciality +' έχει αιτηθεί πρόσβαση στα στοιχεία του smartblister σας. Αν Θέλετε να κάνετε αποδοχή της αίτησης κάντε κλικ στον παρακάτω σύνδεσμο; '+host+'smartblister/doctor/monitoring_accept/'+token
+			html_message = '<p>Ο ιατρός <b>'+ request.user.last_name + ' '+ request.user.first_name + '</b> με ειδικότητα <b>' + doctor.speciality +"</b> έχει αιτηθεί πρόσβαση στα στοιχεία του smartblister σας. Αν Θέλετε να κάνετε αποδοχή της αίτησης κάντε κλικ στον παρακάτω σύνδεσμο;</p><p><a href='"+host+"smartblister/doctor/monitoring_accept/"+token+"/'>"+host+"smartblister/doctor/monitoring_accept/"+token+"/</a></p>"
 			send_mail(subject,plain_message, sender, [recipient,], fail_silently=False,html_message=html_message)
 			messages.success(request,f'Έχει αποσταλεί στον ασθενή με όνομα {patient.user.last_name} {patient.user.first_name} αίτημα μέσω ηλεκτρονικού μηνύματος για εξουσιοδότηση πρόσβασης στα στοιχεία του smartblister που διαθέτει. Θα έχετε πρόσβαση στα σχετικά στοιχεία του ασθενούς όταν γίνει αποδοχή του αιτήματός σας. Αμέσως μετά την αποδοχή του αιτήματος θα λάβετε την σχετική ενημέρωση μέσω ηλεκτρονικού μηνύματος.')
 		except PatientProfile.DoesNotExist:
@@ -167,31 +166,20 @@ def actions(request):
 
 @login_required
 def actions(request,prescription_id):
-	labels = []
-	data = []
 	try:
 		actions = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).order_by('-date_removed')
 		prescription = Prescription.objects.get(id=prescription_id)
 		patient = prescription.patient
-		actionsGroupByDate = BlisterAction.objects.filter(blisterPrescription__prescription__id=prescription_id).values('date_removed__date').annotate(removals=Count('date_removed__date')).order_by('date_removed__date')
-		for act in actionsGroupByDate:
-			labels.append(act['date_removed__date'])
-			data.append(act['removals'])
-		print(labels)
-		print(data)
 	except BlisterPrescription.DoesNotExist:
 		actions = None
 		prescription = None
 		patient = None
-		actionsGroupByDate = None
 
 	context = {
 		'title':'Φαρμακευτική Συνέπεια',
 		'actions':actions,
 		'prescription':prescription,
-		'patient':patient,
-		'labels':labels,
-		'data':data,
+		'patient':patient
 	}
 	
 	return render(request,'doctor/action_list.html', context)
